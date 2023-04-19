@@ -5,9 +5,11 @@ const ControllerApi = config.path.controller
 // User Controllers
 const HomeController = require(`${ControllerApi}/v1/HomeController`)
 const CourseController = require(`${ControllerApi}/v1/CourseController`)
-// Home Router
+
+// User Router
 router.get('/', HomeController.index)
 router.get('/courses', CourseController.index.bind(CourseController))
+
 
 // Admin Controllers
 const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)

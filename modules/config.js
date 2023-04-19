@@ -4,6 +4,7 @@ module.exports = {
     port: 8000,
     path: {
         controller: path.resolve('./modules/controllers'),
-        model: path.resolve('./modules/models')
+        model: path.resolve('./modules/models'),
+        transform: path.resolve('./modules/transform'),
     }
 }
