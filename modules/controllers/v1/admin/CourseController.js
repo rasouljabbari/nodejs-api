@@ -24,6 +24,8 @@ module.exports = new class CourseController extends Controller {
     }
 
     store(req, res) {
+        if (this.showValidationErrors(req, res)) return;
+
         this.model.Course.insertMany([
             {
                 title: req.body.title,
@@ -34,9 +36,7 @@ module.exports = new class CourseController extends Controller {
         ])
             .then((data) => {
                 res.status(201).json(responseHandler('created course', data))
-            }).catch(err => {
-            if (err) res.json(err)
-        })
+            })
     }
 
     update(req, res) {
