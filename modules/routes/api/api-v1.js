@@ -2,12 +2,14 @@ const express = require('express')
 const router = express.Router()
 const ControllerApi = config.path.controller
 
-// Home Controller
+// User Controllers
 const HomeController = require(`${ControllerApi}/v1/HomeController`)
+const CourseController = require(`${ControllerApi}/v1/CourseController`)
 // Home Router
 router.get('/', HomeController.index)
+router.get('/courses', CourseController.index.bind(CourseController))
 
-// Admin Controller
+// Admin Controllers
 const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
 
 // Validation Controller
