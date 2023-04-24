@@ -29,7 +29,7 @@ module.exports = new class CourseController extends Controller {
             const {title, body, price, image} = req.body;
 
             // Validation and Show errors
-            if (this.showValidationErrors(req, res)) return;
+            this.showValidationErrors(req, res)
 
             const newCourse = await this.model.Course.create({title, body, price, image})
             res.status(201).json(responseHandler('دوره با موفقیت افزوده شد', newCourse))

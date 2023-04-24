@@ -14,7 +14,7 @@ module.exports = new class AuthController extends Controller {
             const {name, email, password} = req.body;
 
             // Validation and Show errors
-            if (this.showValidationErrors(req, res)) return;
+            this.showValidationErrors(req, res)
 
             // Check if user with this email already exists
             const existingUser = await this.model.User.findOne({email});
@@ -40,8 +40,16 @@ module.exports = new class AuthController extends Controller {
 
     }
 
-// login(req, res) {
-//     res.json('login')
-// }
+    // async login(req, res) {
+    //     try {
+    //         const {email, password} = req.body;
+    //
+    //         // Validation and Show errors
+    //         this.showValidationErrors(req, res)
+    //
+    //     } catch (error) {
+    //         this.serverErrorHandler(error, req, res)
+    //     }
+    // }
 
 }
