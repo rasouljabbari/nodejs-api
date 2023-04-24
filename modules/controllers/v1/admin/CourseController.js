@@ -31,7 +31,14 @@ module.exports = new class CourseController extends Controller {
             // Validation and Show errors
             this.showValidationErrors(req, res)
 
-            const newCourse = await this.model.Course.create({title, body, price, image})
+            const newCourse = await this.model.Course.create({
+                user: req.user._id,
+                title,
+                body,
+                price,
+                image
+            })
+
             res.status(201).json(responseHandler('دوره با موفقیت افزوده شد', newCourse))
         } catch (error) {
             this.serverErrorHandler(error, req, res)
@@ -39,6 +46,10 @@ module.exports = new class CourseController extends Controller {
     }
 
     update(req, res) {
+        req.checkParams('id' , 'ای دی وارد شده صحیح نیست').isMongoId();
+
+        this.showValidationErrors(req, res)
+
         this.model.Course.findByIdAndUpdate(
             req.params.id,
             {
@@ -49,6 +60,10 @@ module.exports = new class CourseController extends Controller {
     }
 
     destroy(req, res) {
+        req.checkParams('id' , 'ای دی وارد شده صحیح نیست').isMongoId();
+
+        this.showValidationErrors(req, res)
+
         this.model.Course.findByIdAndRemove(
             req.params.id).then(() => {
             res.status(200).json(responseHandler('delete course', []))

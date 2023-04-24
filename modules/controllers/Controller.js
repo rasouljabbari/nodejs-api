@@ -1,6 +1,7 @@
 // Models
 const Course = require('./../models/course');
 const User = require('./../models/user');
+const Episode = require('./../models/episode');
 const {validationResult} = require("express-validator");
 
 const sendErrorDev = (err, res) => {
@@ -21,7 +22,7 @@ const sendErrorProd = (err, res) => {
 
 module.exports = class Controller {
     constructor() {
-        this.model = {Course, User}
+        this.model = {Course,Episode, User}
     }
 
     //Show Errors For Validation Rules

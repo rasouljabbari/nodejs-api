@@ -1,24 +1,24 @@
 const Controller = require(`${config.path.controller}/Controller`)
-const CourseTransform = require(`${config.path.transform}/CourseTransform`)
+const CourseTransform = require(`${config.path.transform}/v1/CourseTransform`)
 
 module.exports = new class CourseController extends Controller {
     index(req, res) {
-        this.model.Course.find()
-            .then(function (courses) {
-                if (courses) {
-                    return res.status(200).json({
-                        status : 200,
-                        data : new CourseTransform().transformCollection(courses)
-                    })
+        const page = req.query.page || 1
+        this.model.Course.paginate({}, {page, limit: 2, populate: ['episodes']})
+            .then(result => {
+                if (result) {
+                    return res.json({
+                        data: new CourseTransform(this.withEpisodesStatus).withPaginate().transformCollection(result),
+                        success: true
+                    });
                 }
-                res.status(200).json({
-                    status : 200,
-                    message : 'course is empty'
+
+                res.json({
+                    message: 'Courses empty',
+                    success: false
                 })
             })
-            .catch(err => {
-                throw err
-            })
+            .catch(err => console.log(err));
     }
 
 }

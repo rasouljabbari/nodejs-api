@@ -1,14 +1,35 @@
 const Controller = require(`${config.path.controller}/Controller`)
-const UserTransform = require(`${config.path.transform}/UserTransform`)
+const UserTransform = require(`${config.path.transform}/v1/UserTransform`)
+
+const responseHandler = (message, data) => {
+    return {
+        message,
+        data
+    }
+}
 
 module.exports = new class UserController extends Controller {
-    async index(req, res) {
 
-        let user = await this.model.User.findById(req.query.id)
-
+    list(req, res) {
+        this.model.User.find()
+            .then(function (data) {
+                let users = data.map((item) =>(
+                    {
+                        id : item._id,
+                        name : item.name,
+                        email : item.email,
+                    }
+                ))
+                res.status(200).json(responseHandler('users', users))
+            })
+            .catch(err => {
+                throw err
+            })
+    }
+    index(req, res) {
         return res.status(200).json({
             success: true,
-            user: new UserTransform().transform(user)
+            user: new UserTransform().transform(req.user)
         })
     }
 

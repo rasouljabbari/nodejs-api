@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const timestamps = require('mongoose-timestamp');
+const mongoosePaginate = require('mongoose-paginate');
 
 const EpisodesSchema = new Schema({
     course: {
@@ -34,5 +35,6 @@ const EpisodesSchema = new Schema({
 })
 
 EpisodesSchema.plugin(timestamps)
+EpisodesSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Episodes', EpisodesSchema)

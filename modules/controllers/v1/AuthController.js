@@ -1,6 +1,6 @@
 const Controller = require(`${config.path.controller}/Controller`)
 const bcrypt = require('bcrypt');
-const UserTransform = require(`${config.path.transform}/UserTransform`)
+const UserTransform = require(`${config.path.transform}/v1/UserTransform`)
 const responseHandler = (message, data) => {
     return {
         message,
@@ -12,7 +12,7 @@ module.exports = new class AuthController extends Controller {
     async register(req, res) {
 
         try {
-            const {name, email, password} = req.body;
+            const {name, type, email, password} = req.body;
 
             // Validation and Show errors
             this.showValidationErrors(req, res)
@@ -32,7 +32,7 @@ module.exports = new class AuthController extends Controller {
             }
 
             // Create new user
-            const newUser = await this.model.User.create({name, email, password});
+            const newUser = await this.model.User.create({name, email, password, type});
             return res.status(201).json(responseHandler('ثبت نام با موفقیت انجام شد', newUser))
 
         } catch (error) {

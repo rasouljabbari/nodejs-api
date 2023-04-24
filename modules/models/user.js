@@ -32,7 +32,6 @@ UserSchema.plugin(timestamps)
 
 UserSchema.pre('save', async function (next) {
     const user = this;
-    console.log("user is :" , user)
     // If password has not changed, move on
     if (!user.isModified('password')) {
         return next();
@@ -43,10 +42,8 @@ UserSchema.pre('save', async function (next) {
         const salt = await bcrypt.genSalt(10);
 
         // Hash password with salt
-        const hashedPassword = await bcrypt.hash(user.password, salt);
-
         // Replace password with hashed password
-        user.password = hashedPassword;
+        user.password = await bcrypt.hash(user.password, salt);
 
         next();
     } catch (error) {

@@ -3,36 +3,36 @@ const router = express.Router()
 const ControllerApi = config.path.controller
 
 
-
 // Validation Controller
 const validationRules = require(`${ControllerApi}/v1/ValidationController`)
 
 // middlewares
-const {checkToken} = require("../../middlewares/checkToken");
 const {uploadImage} = require("../../middlewares/uploadMiddleware");
+const apiAuth = require("../../middlewares/apiAuth");
 const apiAdmin = require("../../middlewares/apiAdmin");
 
 // User Controllers
-const AuthController = require(`${ControllerApi}/v1/AuthController`)
 const HomeController = require(`${ControllerApi}/v1/HomeController`)
 const CourseController = require(`${ControllerApi}/v1/CourseController`)
+const EpisodeController = require(`${ControllerApi}/v1/EpisodeController`)
+const AuthController = require(`${ControllerApi}/v1/AuthController`)
 const UserController = require(`${ControllerApi}/v1/UserController`)
-
-// User
-router.post('/register', validationRules.register, AuthController.register.bind(AuthController))
-router.post('/login', AuthController.login.bind(AuthController))
-router.use(checkToken)
+// Admin Controllers
+const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
+const AdminEpisodeController = require(`${ControllerApi}/v1/admin/EpisodeController`)
 
 // user
-
 router.get('/', HomeController.index)
+router.post('/register', validationRules.register, AuthController.register.bind(AuthController))
+router.post('/login', AuthController.login.bind(AuthController))
+router.get('/users', apiAuth, UserController.list.bind(UserController))
+router.get('/user', apiAuth, UserController.index.bind(UserController))
+
 router.get('/courses', CourseController.index.bind(CourseController))
-router.get('/user', UserController.index.bind(UserController))
+router.get('/episodes/:id', EpisodeController.single.bind(EpisodeController))
 
+router.post('/user/profile', apiAuth, uploadImage.single('image'), UserController.uploadImage.bind(UserController))
 
-router.post('/user/profile', uploadImage.single('image') , UserController.uploadImage.bind(UserController))
-// Admin
-const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
 
 // admin
 const adminRouter = express.Router()
@@ -41,7 +41,15 @@ adminRouter.get('/courses/:id', AdminCourseController.info.bind(AdminCourseContr
 adminRouter.post('/courses', validationRules.storeCourse, AdminCourseController.store.bind(AdminCourseController))
 adminRouter.put('/courses/:id', AdminCourseController.update.bind(AdminCourseController))
 adminRouter.delete('/courses/:id', AdminCourseController.destroy.bind(AdminCourseController))
-router.use('/admin',apiAdmin, adminRouter)
+
+adminRouter.get('/episode', AdminEpisodeController.index.bind(AdminEpisodeController))
+adminRouter.get('/episode/:id', AdminEpisodeController.single.bind(AdminEpisodeController))
+adminRouter.post('/episode', validationRules.storeEpisode, AdminEpisodeController.store.bind(AdminEpisodeController))
+adminRouter.put('/episode/:id', AdminEpisodeController.update.bind(AdminEpisodeController))
+adminRouter.delete('/episode/:id', AdminEpisodeController.destroy.bind(AdminEpisodeController))
+
+
+router.use('/admin', apiAuth, apiAdmin, adminRouter)
 
 
 module.exports = router
