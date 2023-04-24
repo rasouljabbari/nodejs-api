@@ -12,6 +12,7 @@ module.exports = new class AuthController extends Controller {
     async register(req, res) {
 
         try {
+            let nextId = 1;
             const {name, type, email, password} = req.body;
 
             // Validation and Show errors
@@ -32,7 +33,7 @@ module.exports = new class AuthController extends Controller {
             }
 
             // Create new user
-            const newUser = await this.model.User.create({name, email, password, type});
+            const newUser = await this.model.User.create({name, email, password, type, id: nextId++});
             return res.status(201).json(responseHandler('ثبت نام با موفقیت انجام شد', newUser))
 
         } catch (error) {

@@ -8,7 +8,8 @@ const responseHandler = (message, data) => {
 
 module.exports = new class CourseController extends Controller {
     index(req, res) {
-        this.model.Course.find()
+        const page = req.query.page || 1
+        this.model.Course.paginate({}, {page, limit: 2, populate: ['episodes']})
             .then(function (data) {
                 res.status(200).json(responseHandler('course list', data))
             })

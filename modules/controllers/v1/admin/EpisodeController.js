@@ -63,10 +63,13 @@ module.exports = new class EpisodeController extends Controller {
                 viewCount,
                 commentCount
             });
-            course.episodes.push(newEpisode?._id)
-            course.save()
+            console.log(newEpisode)
+            if(newEpisode) {
+                course.episodes.push(newEpisode?._id)
+                course.save()
 
-            res.status(201).json(responseHandler('ویدیو با موفقیت افزوده شد', newEpisode))
+                return res.status(201).json(responseHandler('ویدیو با موفقیت افزوده شد', newEpisode))
+            }
         }
 
     }

@@ -35,8 +35,7 @@ module.exports = {
     storeEpisode: [
         check('title')
             .notEmpty().trim().escape()
-            .withMessage('وارد کردن عنوان اجباری است.').isLength({min: 5})
-            .withMessage('عنوان حداقل می بایست 5 کاراکتر باشد.'),
+            .withMessage('وارد کردن عنوان اجباری است.'),
 
         check('body')
             .notEmpty().trim().escape()
