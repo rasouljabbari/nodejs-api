@@ -1,7 +1,7 @@
 const Controller = require('../../Controller')
-const responseHandler = (text, data) => {
+const responseHandler = (message, data) => {
     return {
-        text,
+        message,
         data
     }
 }
@@ -23,20 +23,19 @@ module.exports = new class CourseController extends Controller {
         }).catch(err => res.json(err))
     }
 
-    store(req, res) {
-        if (this.showValidationErrors(req, res)) return;
+    async store(req, res) {
 
-        this.model.Course.insertMany([
-            {
-                title: req.body.title,
-                body: req.body.body,
-                price: req.body.price,
-                image: req.body.image,
-            }
-        ])
-            .then((data) => {
-                res.status(201).json(responseHandler('created course', data))
-            })
+        try {
+            const {title, body, price, image} = req.body;
+
+            // Validation and Show errors
+            if (this.showValidationErrors(req, res)) return;
+
+            const newCourse = await this.model.Course.create({title, body, price, image})
+            res.status(201).json(responseHandler('دوره با موفقیت افزوده شد', newCourse))
+        } catch (error) {
+            this.serverErrorHandler(error, req, res)
+        }
     }
 
     update(req, res) {
