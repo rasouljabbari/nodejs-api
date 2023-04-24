@@ -22,6 +22,7 @@ router.use(checkToken)
 router.get('/', HomeController.index)
 router.get('/courses', CourseController.index.bind(CourseController))
 router.get('/user', UserController.index.bind(UserController))
+// router.get('/user/profile', UserController.uploadImage.bind(UserController))
 // Admin
 const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
 
