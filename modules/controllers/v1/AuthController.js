@@ -1,5 +1,6 @@
 const Controller = require(`${config.path.controller}/Controller`)
-
+const bcrypt = require('bcrypt');
+const UserTransform = require(`${config.path.transform}/UserTransform`)
 const responseHandler = (message, data) => {
     return {
         message,
@@ -32,7 +33,7 @@ module.exports = new class AuthController extends Controller {
 
             // Create new user
             const newUser = await this.model.User.create({name, email, password});
-            res.status(201).json(responseHandler('ثبت نام با موفقیت انجام شد', newUser))
+            return res.status(201).json(responseHandler('ثبت نام با موفقیت انجام شد', newUser))
 
         } catch (error) {
             this.serverErrorHandler(error, req, res)
@@ -40,16 +41,37 @@ module.exports = new class AuthController extends Controller {
 
     }
 
-    // async login(req, res) {
-    //     try {
-    //         const {email, password} = req.body;
-    //
-    //         // Validation and Show errors
-    //         this.showValidationErrors(req, res)
-    //
-    //     } catch (error) {
-    //         this.serverErrorHandler(error, req, res)
-    //     }
-    // }
+    async login(req, res) {
+        try {
+            const {email, password} = req.body;
+
+            // Validation and Show errors
+            this.showValidationErrors(req, res)
+
+            const existingUser = await this.model.User.findOne({email});
+
+            if (!existingUser) {
+                return res.status(422).json({
+                    'message': 'اطلاعات وارد شده صحیح نیست!',
+                    success: false
+                })
+            }
+
+            bcrypt.compare(password, existingUser?.password, (err, status) => {
+                if (!status) {
+                    return res.status(422).json({
+                        'message': 'رمز وارد شده صحیح نیست!',
+                        success: false
+                    })
+                }
+
+                return res.status(200).json(responseHandler('ورورد با موفقیت انجام شد', new UserTransform().transform(existingUser, true)))
+            })
+
+
+        } catch (error) {
+            this.serverErrorHandler(error, req, res)
+        }
+    }
 
 }
