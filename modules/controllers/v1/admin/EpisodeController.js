@@ -50,7 +50,8 @@ module.exports = new class EpisodeController extends Controller {
         // Validation and Show errors
         this.showValidationErrors(req, res)
 
-        let course = await this.model.Course.findById(req.body.course)
+        let course = await this.model.Course.findById(req.body.course_id)
+        console.log("Course id : ", course._id)
 
         if(course) {
             let newEpisode = await this.model.Episode.create({
@@ -62,6 +63,8 @@ module.exports = new class EpisodeController extends Controller {
                 viewCount,
                 commentCount
             });
+            course.episodes.push(newEpisode?._id)
+            course.save()
 
             res.status(201).json(responseHandler('ویدیو با موفقیت افزوده شد', newEpisode))
         }

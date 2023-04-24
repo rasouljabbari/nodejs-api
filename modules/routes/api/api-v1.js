@@ -42,11 +42,11 @@ adminRouter.post('/courses', validationRules.storeCourse, AdminCourseController.
 adminRouter.put('/courses/:id', AdminCourseController.update.bind(AdminCourseController))
 adminRouter.delete('/courses/:id', AdminCourseController.destroy.bind(AdminCourseController))
 
-adminRouter.get('/episode', AdminEpisodeController.index.bind(AdminEpisodeController))
-adminRouter.get('/episode/:id', AdminEpisodeController.single.bind(AdminEpisodeController))
-adminRouter.post('/episode', validationRules.storeEpisode, AdminEpisodeController.store.bind(AdminEpisodeController))
-adminRouter.put('/episode/:id', AdminEpisodeController.update.bind(AdminEpisodeController))
-adminRouter.delete('/episode/:id', AdminEpisodeController.destroy.bind(AdminEpisodeController))
+adminRouter.get('/episodes', AdminEpisodeController.index.bind(AdminEpisodeController))
+adminRouter.get('/episodes/:id', AdminEpisodeController.single.bind(AdminEpisodeController))
+adminRouter.post('/episodes', validationRules.storeEpisode, AdminEpisodeController.store.bind(AdminEpisodeController))
+adminRouter.put('/episodes/:id', AdminEpisodeController.update.bind(AdminEpisodeController))
+adminRouter.delete('/episodes/:id', AdminEpisodeController.destroy.bind(AdminEpisodeController))
 
 
 router.use('/admin', apiAuth, apiAdmin, adminRouter)

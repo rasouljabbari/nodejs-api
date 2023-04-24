@@ -1,5 +1,5 @@
 const Controller = require(`${config.path.controller}/Controller`)
-const CourseTransform = require(`${config.path.transform}/v1/CourseTransform`)
+// const CourseTransform = require(`${config.path.transform}/v1/CourseTransform`)
 
 module.exports = new class CourseController extends Controller {
     index(req, res) {
@@ -8,7 +8,8 @@ module.exports = new class CourseController extends Controller {
             .then(result => {
                 if (result) {
                     return res.json({
-                        data: new CourseTransform(this.withEpisodesStatus).withPaginate().transformCollection(result),
+                        // data: new CourseTransform(this.wit hEpisodesStatus).withPaginate().transformCollection(result),
+                        data: result,
                         success: true
                     });
                 }

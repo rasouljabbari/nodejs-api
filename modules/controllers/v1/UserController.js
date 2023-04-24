@@ -11,13 +11,14 @@ const responseHandler = (message, data) => {
 module.exports = new class UserController extends Controller {
 
     list(req, res) {
-        this.model.User.find()
+        this.model.User.find({}).populate('courses')
             .then(function (data) {
                 let users = data.map((item) =>(
                     {
                         id : item._id,
                         name : item.name,
                         email : item.email,
+                        courses : item.courses,
                     }
                 ))
                 res.status(200).json(responseHandler('users', users))

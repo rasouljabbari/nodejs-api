@@ -31,13 +31,18 @@ module.exports = new class CourseController extends Controller {
             // Validation and Show errors
             this.showValidationErrors(req, res)
 
+            let user = await this.model.User.findById(req.body.user_id)
+            console.log("User id : ", user._id)
+
             const newCourse = await this.model.Course.create({
-                user: req.user._id,
                 title,
                 body,
                 price,
                 image
             })
+
+            user.courses.push(newCourse?._id)
+            user.save()
 
             res.status(201).json(responseHandler('دوره با موفقیت افزوده شد', newCourse))
         } catch (error) {
