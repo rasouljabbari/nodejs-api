@@ -17,6 +17,10 @@ const UserSchema = new Schema({
         type: String,
         require: true
     },
+    type: {
+        type: String,
+        default: 'user'
+    },
     courses: [
         {
             type: Schema.Types.ObjectId, ref: 'Course'

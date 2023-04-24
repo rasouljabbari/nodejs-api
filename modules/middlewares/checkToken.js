@@ -5,7 +5,7 @@ module.exports = {
         let token = req.get('authorization')
         if (token) {
             token = token.slice(7)
-            verify(token, config.secret, (err) => {
+            verify(token, config.secret, (err, decoded) => {
                 if (err) {
                     return res.status(401).json({
                         message: 'توکن وارد شده معتبر نیست',

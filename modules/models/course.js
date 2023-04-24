@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const timestamps = require('mongoose-timestamp');
+const mongoosePaginate = require('mongoose-paginate');
 
 const CourseSchema = new Schema({
     user: {
@@ -31,5 +32,6 @@ const CourseSchema = new Schema({
 })
 
 CourseSchema.plugin(timestamps)
+CourseSchema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Course', CourseSchema)

@@ -10,6 +10,7 @@ const validationRules = require(`${ControllerApi}/v1/ValidationController`)
 // middlewares
 const {checkToken} = require("../../middlewares/checkToken");
 const {uploadImage} = require("../../middlewares/uploadMiddleware");
+const apiAdmin = require("../../middlewares/apiAdmin");
 
 // User Controllers
 const AuthController = require(`${ControllerApi}/v1/AuthController`)
@@ -40,7 +41,7 @@ adminRouter.get('/courses/:id', AdminCourseController.info.bind(AdminCourseContr
 adminRouter.post('/courses', validationRules.storeCourse, AdminCourseController.store.bind(AdminCourseController))
 adminRouter.put('/courses/:id', AdminCourseController.update.bind(AdminCourseController))
 adminRouter.delete('/courses/:id', AdminCourseController.destroy.bind(AdminCourseController))
-router.use('/admin', adminRouter)
+router.use('/admin',apiAdmin, adminRouter)
 
 
 module.exports = router
