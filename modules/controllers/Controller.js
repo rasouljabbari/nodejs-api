@@ -49,4 +49,16 @@ module.exports = class Controller {
             sendErrorProd(err, res)
         }
     }
+
+    customError(res, statusCode, field, message) {
+        return res.status(statusCode).json(
+            {
+                errors: [
+                    {
+                        field,
+                        message
+                    }],
+                success: false
+            });
+    }
 }

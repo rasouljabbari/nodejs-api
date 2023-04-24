@@ -1,10 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const ControllerApi = config.path.controller
-const {checkToken} = require("../../middlewares/checkToken");
+
+
 
 // Validation Controller
 const validationRules = require(`${ControllerApi}/v1/ValidationController`)
+
+// middlewares
+const {checkToken} = require("../../middlewares/checkToken");
+const {uploadImage} = require("../../middlewares/uploadMiddleware");
 
 // User Controllers
 const AuthController = require(`${ControllerApi}/v1/AuthController`)
@@ -22,7 +27,9 @@ router.use(checkToken)
 router.get('/', HomeController.index)
 router.get('/courses', CourseController.index.bind(CourseController))
 router.get('/user', UserController.index.bind(UserController))
-// router.get('/user/profile', UserController.uploadImage.bind(UserController))
+
+
+router.post('/user/profile', uploadImage.single('image') , UserController.uploadImage.bind(UserController))
 // Admin
 const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
 
