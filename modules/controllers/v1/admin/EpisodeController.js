@@ -26,8 +26,9 @@ module.exports = new class EpisodeController extends Controller {
 
     single(req, res) {
         req.checkParams('id' , 'ای دی وارد شده صحیح نیست').isMongoId();
-        
-        this.showValidationErrors(req, res)
+
+        if(this.showValidationErrors(req, res)) 
+            return;
 
         this.model.Episode.findById(req.params.id , (err , episode) => {
             if(episode) {
@@ -48,10 +49,10 @@ module.exports = new class EpisodeController extends Controller {
         const {title, body, videoUrl, number,viewCount,commentCount } = req.body;
 
         // Validation and Show errors
-        this.showValidationErrors(req, res)
+        if(this.showValidationErrors(req, res)) 
+            return;
 
         let course = await this.model.Course.findById(req.body.course_id)
-        console.log("Course id : ", course._id)
 
         if(course) {
             let newEpisode = await this.model.Episode.create({
@@ -63,7 +64,6 @@ module.exports = new class EpisodeController extends Controller {
                 viewCount,
                 commentCount
             });
-            console.log(newEpisode)
             if(newEpisode) {
                 course.episodes.push(newEpisode?._id)
                 course.save()

@@ -12,11 +12,12 @@ module.exports = new class AuthController extends Controller {
     async register(req, res) {
 
         try {
-            let nextId = 1;
             const {name, type, email, password} = req.body;
+            const uri = config.NODE_ENV === 'dev' ? `http://localhost:${config.port}/` : config.site_uri
 
             // Validation and Show errors
-            this.showValidationErrors(req, res)
+            if(this.showValidationErrors(req, res)) 
+            return;
 
             // Check if user with this email already exists
             const existingUser = await this.model.User.findOne({email});
@@ -33,7 +34,13 @@ module.exports = new class AuthController extends Controller {
             }
 
             // Create new user
-            const newUser = await this.model.User.create({name, email, password, type, id: nextId++});
+            const newUser = await this.model.User.create({
+                name,
+                email,
+                password,
+                type,
+                profile : uri + req.file.path.replace(/\\/g, '/')
+            });
             return res.status(201).json(responseHandler('ثبت نام با موفقیت انجام شد', newUser))
 
         } catch (error) {
@@ -47,7 +54,8 @@ module.exports = new class AuthController extends Controller {
             const {email, password} = req.body;
 
             // Validation and Show errors
-            this.showValidationErrors(req, res)
+            if(this.showValidationErrors(req, res)) 
+            return;
 
             const existingUser = await this.model.User.findOne({email});
 

@@ -5,7 +5,8 @@ module.exports = new class EpisodeController extends Controller {
     single(req, res) {
         req.checkParams('id', 'ای دی وارد شده صحیح نیست').isMongoId();
 
-        this.showValidationErrors(req, res)
+        if(this.showValidationErrors(req, res)) 
+            return;
 
         this.model.Episode.findById(req.params.id).populate('Course').exec((err, episode) => {
             if (err) throw err;

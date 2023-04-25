@@ -27,19 +27,19 @@ module.exports = new class CourseController extends Controller {
     async store(req, res) {
 
         try {
-            const {title, body, price, image} = req.body;
+            const {title, body, price} = req.body;
 
             // Validation and Show errors
-            this.showValidationErrors(req, res)
+            if(this.showValidationErrors(req, res)) 
+            return;
 
             let user = await this.model.User.findById(req.body.user_id)
-            console.log("User id : ", user._id)
-
+            const uri = config.NODE_ENV === 'dev' ? `http://localhost:${config.port}/` : config.site_uri
             const newCourse = await this.model.Course.create({
                 title,
                 body,
                 price,
-                image
+                image : uri + req.file.path.replace(/\\/g, '/')
             })
 
             user.courses.push(newCourse?._id)
@@ -54,7 +54,8 @@ module.exports = new class CourseController extends Controller {
     update(req, res) {
         req.checkParams('id' , 'ای دی وارد شده صحیح نیست').isMongoId();
 
-        this.showValidationErrors(req, res)
+        if(this.showValidationErrors(req, res)) 
+            return;
 
         this.model.Course.findByIdAndUpdate(
             req.params.id,
@@ -68,7 +69,8 @@ module.exports = new class CourseController extends Controller {
     destroy(req, res) {
         req.checkParams('id' , 'ای دی وارد شده صحیح نیست').isMongoId();
 
-        this.showValidationErrors(req, res)
+        if(this.showValidationErrors(req, res)) 
+            return;
 
         this.model.Course.findByIdAndRemove(
             req.params.id).then(() => {

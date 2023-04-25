@@ -1,6 +1,24 @@
 const {check} = require('express-validator');
 
 module.exports = {
+    register: [
+        check('name')
+            .notEmpty().trim().escape().withMessage('وارد کردن نام و نام خانوادگی اجباری است.')
+            .isLength({min: 5}).withMessage('نام و نام خانوادگی حداقل می بایست 5 کاراکتر باشد.'),
+
+        check('profile')
+            .notEmpty().withMessage('آپلود عکس پروفایل الزامی است')
+            .isIn([ "PNG", "JPEG", "WEBP" ]).withMessage('فرمت فایل بارگزاری شده باید یکی از فرمت های png,jpeg,jpg,webp باشد'),
+
+        check('email')
+            .notEmpty().trim().escape()
+            .withMessage('وارد کردن ایمیل اجباری است.')
+            .isEmail().withMessage('فرمت ایمیل معتبر نیست'),
+
+        check('password')
+            .notEmpty().trim().escape().withMessage('وارد کردن رمز اجباری است.')
+            .isLength({min: 8}).withMessage('حداقل تعداد رمز 8 رقم می باشد'),
+    ],
     storeCourse: [
         check('title')
             .notEmpty().trim().escape()
@@ -17,20 +35,6 @@ module.exports = {
 
         check('image')
             .notEmpty().trim().escape().withMessage('بارگزاری عکس دوره اجباری است.'),
-    ],
-    register: [
-        check('name')
-            .notEmpty().trim().escape().withMessage('وارد کردن نام و نام خانوادگی اجباری است.')
-            .isLength({min: 5}).withMessage('نام و نام خانوادگی حداقل می بایست 5 کاراکتر باشد.'),
-
-        check('email')
-            .notEmpty().trim().escape()
-            .withMessage('وارد کردن ایمیل اجباری است.')
-            .isEmail().withMessage('فرمت ایمیل معتبر نیست'),
-
-        check('password')
-            .notEmpty().trim().escape().withMessage('وارد کردن رمز اجباری است.')
-            .isLength({min: 8}).withMessage('حداقل تعداد رمز 8 رقم می باشد'),
     ],
     storeEpisode: [
         check('title')

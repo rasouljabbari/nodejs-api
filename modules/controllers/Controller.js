@@ -5,6 +5,7 @@ const Episode = require('./../models/episode');
 const {validationResult} = require("express-validator");
 
 const sendErrorDev = (err, res) => {
+    console.log(err, res)
     const statusCode = err.statusCode || 500;
     return res.status(statusCode).json({
         status: statusCode,
@@ -27,7 +28,15 @@ module.exports = class Controller {
 
     //Show Errors For Validation Rules
     showValidationErrors(req, res) {
-        const errors = validationResult(req);
+        let body = req.body
+        if(req.file) {
+            body = {
+                ...req.body,
+                ...req.file,
+            }
+        }
+
+        const errors = validationResult(body);
         if (!errors.isEmpty()) {
             return res.status(400).json(
                 {

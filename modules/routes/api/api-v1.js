@@ -21,10 +21,15 @@ const UserController = require(`${ControllerApi}/v1/UserController`)
 const AdminCourseController = require(`${ControllerApi}/v1/admin/CourseController`)
 const AdminEpisodeController = require(`${ControllerApi}/v1/admin/EpisodeController`)
 
+const multer = require('multer');
+const upload = multer();
+
 // user
 router.get('/', HomeController.index)
-router.post('/register', validationRules.register, AuthController.register.bind(AuthController))
-router.post('/login', AuthController.login.bind(AuthController))
+
+router.post('/register', validationRules.register, uploadImage.single('profile'), AuthController.register.bind(AuthController))
+
+router.post('/login',upload.none(), AuthController.login.bind(AuthController))
 router.get('/users', apiAuth, UserController.list.bind(UserController))
 router.get('/user', apiAuth, UserController.index.bind(UserController))
 
@@ -38,13 +43,13 @@ router.post('/user/profile', apiAuth, uploadImage.single('image'), UserControlle
 const adminRouter = express.Router()
 adminRouter.get('/courses', AdminCourseController.index.bind(AdminCourseController))
 adminRouter.get('/courses/:id', AdminCourseController.info.bind(AdminCourseController))
-adminRouter.post('/courses', validationRules.storeCourse, AdminCourseController.store.bind(AdminCourseController))
+adminRouter.post('/courses',uploadImage.single('image'), validationRules.storeCourse, AdminCourseController.store.bind(AdminCourseController))
 adminRouter.put('/courses/:id', AdminCourseController.update.bind(AdminCourseController))
 adminRouter.delete('/courses/:id', AdminCourseController.destroy.bind(AdminCourseController))
 
 adminRouter.get('/episodes', AdminEpisodeController.index.bind(AdminEpisodeController))
 adminRouter.get('/episodes/:id', AdminEpisodeController.single.bind(AdminEpisodeController))
-adminRouter.post('/episodes', validationRules.storeEpisode, AdminEpisodeController.store.bind(AdminEpisodeController))
+adminRouter.post('/episodes',upload.none(), validationRules.storeEpisode, AdminEpisodeController.store.bind(AdminEpisodeController))
 adminRouter.put('/episodes/:id', AdminEpisodeController.update.bind(AdminEpisodeController))
 adminRouter.delete('/episodes/:id', AdminEpisodeController.destroy.bind(AdminEpisodeController))
 

@@ -13,6 +13,10 @@ const UserSchema = new Schema({
         require: true,
         unique: true
     },
+    profile: {
+        type: String,
+        required: true
+    },
     password: {
         type: String,
         require: true
