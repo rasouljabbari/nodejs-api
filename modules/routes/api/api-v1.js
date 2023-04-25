@@ -44,7 +44,7 @@ const adminRouter = express.Router()
 adminRouter.get('/courses', AdminCourseController.index.bind(AdminCourseController))
 adminRouter.get('/courses/:id', AdminCourseController.info.bind(AdminCourseController))
 adminRouter.post('/courses',uploadImage.single('image'), validationRules.storeCourse, AdminCourseController.store.bind(AdminCourseController))
-adminRouter.put('/courses/:id', AdminCourseController.update.bind(AdminCourseController))
+adminRouter.put('/courses/:id',uploadImage.single('image'), AdminCourseController.update.bind(AdminCourseController))
 adminRouter.delete('/courses/:id', AdminCourseController.destroy.bind(AdminCourseController))
 
 adminRouter.get('/episodes', AdminEpisodeController.index.bind(AdminEpisodeController))
